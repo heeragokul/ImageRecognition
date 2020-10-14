@@ -30,3 +30,6 @@ sqlparse==0.3.1
 urllib3==1.25.8
 webencodings==0.5.1
 dj-database-url
+django-heroku
+
+
