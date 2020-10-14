@@ -1,0 +1,59 @@
+{% load static %}
+
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+  <title>IPL-Matches</title>
+  <meta name="description" content="website description" />
+  <meta name="keywords" content="website keywords, website keywords" />
+  <meta http-equiv="content-type" content="text/html; charset=windows-1252" />
+  <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
+
+  <style>
+
+
+#header
+{ background: transparent url({% static 'face.jpg' %}) repeat;}
+  </style>
+
+
+</head>
+
+<body>
+  <div id="main">
+    <div id="header">
+      <div id="logo">
+        <div id="logo_text">
+          <!-- class="logo_colour", allows you to change the colour of the text -->
+          <h1>    FACE RECOGNITION</h1>
+          <h2></h2>
+        </div>
+      </div>
+      <div id="menubar">
+
+      </div>
+    </div>
+    <div id="site_content">
+
+      <div id="content">
+        <h1>Select The Actions</h1>
+
+            <form  method="post" action="{% url 'homeview' %}">
+                {% csrf_token %}
+              <input type="submit" value="Run FaceDetection" name="facedetaection">
+              <input type="submit" value="Run FaceDataSet" name="faceDataSet">
+              <input type="submit" value="Run FaceTraining" name="faceTraining">
+              <input type="submit" value="Run faceRecognition" name="faceRecognition">
+          </form>
+
+
+
+    </div>
+    <div id="footer">
+      <p>FACE RECOGNITION</p>
+    </div>
+  </div>
+</body>
+</html>

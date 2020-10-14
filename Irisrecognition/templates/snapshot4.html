@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<button id="start">Start Camera</button>
+<button onclick="stopWebcam();">Stop WebCam</button>
+
+<div class="raw">
+
+<video id="video" width="640" height="480" autoplay></video>
+<button id="snap">Snap Photo</button>
+<canvas id="canvas" width="640" height="480"></canvas>
+</div>
+</body>
+<script>
+
+function getCookie(name) {
+  var value = "; " + document.cookie;
+  var parts = value.split("; " + name + "=");
+  if (parts.length == 2) return parts.pop().split(";").shift();
+}
+
+
+// To get the csrf_token from cookie to perform post request using ajax
+var $csrfmiddlewaretoken  = getCookie('csrftoken');
+if ($csrfmiddlewaretoken == undefined)
+               {
+                   $csrfmiddlewaretoken = $('#csrf').val();
+               }
+
+    // Grab elements, create settings, etc.
+var video = document.getElementById('video');
+
+// Get access to the camera!
+if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    navigator.mediaDevices.getUserMedia({
+        video: true
+    }).then(function(stream) {
+        //video.src = window.URL.createObjectURL(stream);
+        video.srcObject = stream;
+        video.play();
+    });
+}
+
+// Elements for taking the snapshot
+var canvas = document.getElementById('canvas');
+var context = canvas.getContext('2d');
+var video = document.getElementById('video');
+
+// Trigger photo take
+document.getElementById("snap").addEventListener("click", function() {
+    context.drawImage(video, 0, 0, 640, 480);
+
+
+
+    // get image data as string
+  const imageString = canvas.toDataURL();
+  console.log(imageString, "---------------------------------")
+  console.log($csrfmiddlewaretoken, "---------bjjb------------------------")
+
+  // send image to server
+
+  const request = new Request(
+    '/img',
+    {headers: {'X-CSRFToken': $csrfmiddlewaretoken}}
+);
+
+    fetch('/img', {
+    method: "POST",
+    cache: "no-cache",
+    credentials: "same-origin",
+    headers: {
+        "X-CSRFToken": $csrfmiddlewaretoken,
+        "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      imageString: imageString,
+    }),
+  })
+
+
+
+
+});
+
+function stopWebcam() {
+          webcam.stop();
+      }
+</script>
+</html>
