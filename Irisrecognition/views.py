@@ -28,6 +28,11 @@ class TestView(TemplateView):
 
 class ImageParser(TemplateView):
     template_name = 'snapshot5.html'
+
+
+    def post(self, request):
+       print("yesss")
+       return render(request, self.template_name, {})
 #
 #     def post(self, request):
 #         image = json.loads(request.body)
